@@ -1,10 +1,9 @@
 // Centralized API client module - owns all fetch calls and error envelope parsing.
 // Components never build URLs ad hoc.
 
-import {
+import type {
   AdjustStockPayload,
   AdjustStockResult,
-  ApiError,
   ApiErrorEnvelope,
   CreateOrderPayload,
   CreateProductPayload,
@@ -16,6 +15,7 @@ import {
   StockMovement,
   UpdateProductPayload,
 } from '../types/api'
+import { ApiError } from '../types/api'
 
 async function request<T>(
   endpoint: string,
