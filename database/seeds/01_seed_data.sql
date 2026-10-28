@@ -95,6 +95,7 @@ INSERT INTO stock_movements (product_id, type, qty, note, created_at) VALUES
 (13, 'out', 5, 'Retail counter stock display', now() - INTERVAL '2 hours'),
 (14, 'out', 3, 'Monthly bar maintenance routine', now() - INTERVAL '1 hours');
 
-ALTER SEQUENCE sales_orders_id_seq RESTART WITH 4;
-ALTER SEQUENCE sales_order_items_id_seq RESTART WITH 8;
-ALTER SEQUENCE stock_movements_id_seq RESTART WITH 28;
+SELECT setval(pg_get_serial_sequence('products', 'id'), COALESCE(MAX(id), 1)) FROM products;
+SELECT setval(pg_get_serial_sequence('stock_movements', 'id'), COALESCE(MAX(id), 1)) FROM stock_movements;
+SELECT setval(pg_get_serial_sequence('sales_orders', 'id'), COALESCE(MAX(id), 1)) FROM sales_orders;
+SELECT setval(pg_get_serial_sequence('sales_order_items', 'id'), COALESCE(MAX(id), 1)) FROM sales_order_items;

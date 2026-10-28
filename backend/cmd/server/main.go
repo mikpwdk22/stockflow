@@ -39,9 +39,11 @@ func main() {
 
 	// Repositories
 	productRepo := repository.NewProductRepository(db.Pool)
+	stockRepo := repository.NewStockRepository(db.Pool)
 
 	// Handlers
 	productHandler := handlers.NewProductHandler(productRepo)
+	stockHandler := handlers.NewStockHandler(stockRepo)
 
 	r := chi.NewRouter()
 
@@ -72,6 +74,8 @@ func main() {
 			r.Get("/{id}", productHandler.GetByID)
 			r.Put("/{id}", productHandler.Update)
 			r.Delete("/{id}", productHandler.Delete)
+			r.Post("/{id}/stock", stockHandler.AdjustStock)
+			r.Get("/{id}/movements", stockHandler.GetMovements)
 		})
 	})
 
