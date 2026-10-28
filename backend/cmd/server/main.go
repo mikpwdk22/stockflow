@@ -40,10 +40,12 @@ func main() {
 	// Repositories
 	productRepo := repository.NewProductRepository(db.Pool)
 	stockRepo := repository.NewStockRepository(db.Pool)
+	orderRepo := repository.NewOrderRepository(db.Pool)
 
 	// Handlers
 	productHandler := handlers.NewProductHandler(productRepo)
 	stockHandler := handlers.NewStockHandler(stockRepo)
+	orderHandler := handlers.NewOrderHandler(orderRepo)
 
 	r := chi.NewRouter()
 
@@ -76,6 +78,18 @@ func main() {
 			r.Delete("/{id}", productHandler.Delete)
 			r.Post("/{id}/stock", stockHandler.AdjustStock)
 			r.Get("/{id}/movements", stockHandler.GetMovements)
+		})
+
+		r.Route("/orders", func(r chi.Router) {
+			r.Get("/", orderHandler.List)
+			r.Post("/", orderHandler.Create)
+			r.Get("/{id}", orderHandler.GetByID)
+			r.Post("/{id}/cancel", orderHandler.Cancel)
+		})
+
+		r.Route("/reports", func(r chi.Router) {
+			r.Get("/summary", orderHandler.GetSummary)
+			r.Get("/daily-sales", orderHandler.GetDailySales)
 		})
 	})
 
