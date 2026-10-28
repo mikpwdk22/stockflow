@@ -5,18 +5,20 @@ services:
     restart: unless-stopped
 
     environment:
-      POSTGRES_DB: ...
-      POSTGRES_USER: ...
-      POSTGRES_PASSWORD: ...
+      POSTGRES_DB: stockflow
+      POSTGRES_USER: MikoSanjaya
+      POSTGRES_PASSWORD: stockflowtest
 
     ports:
       - "5432:5432"
 
     volumes:
       - postgres_data:/var/lib/postgresql/data
+      - ./database/migrations/000001_init_schema.up.sql:/docker-entrypoint-initdb.d/01_schema.sql:ro
+      - ./database/seeds/01_seed_data.sql:/docker-entrypoint-initdb.d/02_seeds.sql:ro
 
     healthcheck:
-      test: [ "CMD", "pg_isready", "-U", "your_username", "-d", "your_database" ]
+      test: [ "CMD", "pg_isready", "-U", "MikoSanjaya", "-d", "stockflow" ]
       interval: 5s
       timeout: 5s
       retries: 5
