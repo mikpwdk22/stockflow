@@ -1,16 +1,21 @@
 import { useCallback, useEffect, useState } from 'react'
 import { api } from './api/client'
+import { AdjustStockModal } from './components/AdjustStockModal'
+import { CreateOrderModal } from './components/CreateOrderModal'
 import { MovementsModal } from './components/MovementsModal'
+import { OrderDetailModal } from './components/OrderDetailModal'
+import { OrdersListModal } from './components/OrdersListModal'
 import { ProductModal } from './components/ProductModal'
 import { ProductTable } from './components/ProductTable'
 import { SummaryCards } from './components/SummaryCards'
 import { useDebounce } from './hooks/useDebounce'
-import type { DailySalesReport, DashboardSummary, Product } from './types/api'
+import type { DailySalesReport, DashboardSummary, Product, SalesOrder } from './types/api'
 import { ApiError } from './types/api'
 
 export function App() {
   // Products state
   const [products, setProducts] = useState<Product[]>([])
+  const [allProductsForDropdown, setAllProductsForDropdown] = useState<Product[]>([])
   const [total, setTotal] = useState(0)
   const [page, setPage] = useState(1)
   const [limit] = useState(10)
@@ -35,6 +40,14 @@ export function App() {
   const [isMovementsModalOpen, setIsMovementsModalOpen] = useState(false)
   const [selectedProductForMovements, setSelectedProductForMovements] = useState<Product | null>(null)
 
+  const [isAdjustStockModalOpen, setIsAdjustStockModalOpen] = useState(false)
+  const [selectedProductForStock, setSelectedProductForStock] = useState<Product | null>(null)
+
+  const [isCreateOrderModalOpen, setIsCreateOrderModalOpen] = useState(false)
+  const [isOrdersListModalOpen, setIsOrdersListModalOpen] = useState(false)
+  const [selectedOrderForDetail, setSelectedOrderForDetail] = useState<SalesOrder | null>(null)
+  const [isOrderDetailModalOpen, setIsOrderDetailModalOpen] = useState(false)
+
   // Fetch summaries
   const fetchSummaries = useCallback(async () => {
     try {
@@ -46,6 +59,16 @@ export function App() {
       setDailySales(dailyData)
     } catch {
       // Quiet fallback for summaries
+    }
+  }, [])
+
+  // Fetch all active products for order dropdown
+  const fetchDropdownProducts = useCallback(async () => {
+    try {
+      const res = await api.products.list({ limit: 100 })
+      setAllProductsForDropdown(res.data)
+    } catch {
+      // Quiet fallback
     }
   }, [])
 
@@ -78,7 +101,8 @@ export function App() {
   useEffect(() => {
     fetchProducts()
     fetchSummaries()
-  }, [fetchProducts, fetchSummaries])
+    fetchDropdownProducts()
+  }, [fetchProducts, fetchSummaries, fetchDropdownProducts])
 
   // Reset page when filters change
   useEffect(() => {
@@ -100,6 +124,7 @@ export function App() {
       })
       fetchProducts()
       fetchSummaries()
+      fetchDropdownProducts()
     } catch (err) {
       if (err instanceof ApiError && err.code === 'PRODUCT_HAS_HISTORY') {
         setActionNotice({
@@ -136,13 +161,25 @@ export function App() {
             </div>
           </div>
 
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2 sm:gap-3">
+            <button
+              onClick={() => setIsOrdersListModalOpen(true)}
+              className="btn btn-secondary bg-slate-800 hover:bg-slate-700 text-white border-slate-700 text-xs py-2 px-3 cursor-pointer"
+            >
+              📋 Sales Orders
+            </button>
+            <button
+              onClick={() => setIsCreateOrderModalOpen(true)}
+              className="btn btn-primary bg-emerald-600 hover:bg-emerald-500 text-white text-xs py-2 px-3 shadow-sm cursor-pointer"
+            >
+              + Create Order
+            </button>
             <button
               onClick={() => {
                 setProductToEdit(null)
                 setIsProductModalOpen(true)
               }}
-              className="btn btn-primary bg-indigo-600 hover:bg-indigo-500 text-white text-xs py-2 px-3.5 shadow-sm"
+              className="btn btn-primary bg-indigo-600 hover:bg-indigo-500 text-white text-xs py-2 px-3 shadow-sm cursor-pointer"
             >
               + Add Product
             </button>
@@ -198,7 +235,7 @@ export function App() {
             {search && (
               <button
                 onClick={() => setSearch('')}
-                className="absolute right-3 top-2.5 text-xs text-slate-400 hover:text-slate-600"
+                className="absolute right-3 top-2.5 text-xs text-slate-400 hover:text-slate-600 cursor-pointer"
               >
                 ✕
               </button>
@@ -257,8 +294,8 @@ export function App() {
           error={error}
           onRetry={fetchProducts}
           onAdjustStock={(p) => {
-            // Handled in Feature 8
-            alert(`Adjust stock modal for ${p.sku} will open`)
+            setSelectedProductForStock(p)
+            setIsAdjustStockModalOpen(true)
           }}
           onViewMovements={(p) => {
             setSelectedProductForMovements(p)
@@ -299,7 +336,61 @@ export function App() {
           </div>
         )}
 
-        {/* Modals */}
+        {/* Adjust Stock Modal */}
+        <AdjustStockModal
+          isOpen={isAdjustStockModalOpen}
+          product={selectedProductForStock}
+          onClose={() => setIsAdjustStockModalOpen(false)}
+          onSuccess={() => {
+            setActionNotice({
+              type: 'success',
+              message: `Stock adjusted for ${selectedProductForStock?.sku}. Audit movement recorded.`,
+            })
+            fetchProducts()
+            fetchSummaries()
+            fetchDropdownProducts()
+          }}
+        />
+
+        {/* Create Order Modal */}
+        <CreateOrderModal
+          isOpen={isCreateOrderModalOpen}
+          products={allProductsForDropdown.length > 0 ? allProductsForDropdown : products}
+          onClose={() => setIsCreateOrderModalOpen(false)}
+          onSuccess={() => {
+            fetchProducts()
+            fetchSummaries()
+            fetchDropdownProducts()
+          }}
+        />
+
+        {/* Orders List Modal */}
+        <OrdersListModal
+          isOpen={isOrdersListModalOpen}
+          onClose={() => setIsOrdersListModalOpen(false)}
+          onSelectOrder={(order) => {
+            setSelectedOrderForDetail(order)
+            setIsOrderDetailModalOpen(true)
+          }}
+        />
+
+        {/* Order Detail Modal */}
+        <OrderDetailModal
+          isOpen={isOrderDetailModalOpen}
+          order={selectedOrderForDetail}
+          onClose={() => setIsOrderDetailModalOpen(false)}
+          onOrderCancelled={() => {
+            setActionNotice({
+              type: 'success',
+              message: `Sales Order #${selectedOrderForDetail?.id} cancelled. Stock visibly restored to inventory!`,
+            })
+            fetchProducts()
+            fetchSummaries()
+            fetchDropdownProducts()
+          }}
+        />
+
+        {/* Product Modal (Create / Edit) */}
         <ProductModal
           isOpen={isProductModalOpen}
           productToEdit={productToEdit}
@@ -307,9 +398,11 @@ export function App() {
           onSuccess={() => {
             fetchProducts()
             fetchSummaries()
+            fetchDropdownProducts()
           }}
         />
 
+        {/* Movements Modal */}
         <MovementsModal
           isOpen={isMovementsModalOpen}
           product={selectedProductForMovements}
