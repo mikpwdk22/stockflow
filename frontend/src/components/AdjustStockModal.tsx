@@ -64,7 +64,6 @@ export const AdjustStockModal: React.FC<AdjustStockModalProps> = ({
     } catch (err) {
       if (err instanceof ApiError) {
         if (err.code === 'INSUFFICIENT_STOCK') {
-          // Requirement: Backend's 409 INSUFFICIENT_STOCK must appear in the UI with available quantity
           setInsufficientStockError({
             available: err.available ?? product.stock,
             requested: Number(qty),
@@ -107,7 +106,6 @@ export const AdjustStockModal: React.FC<AdjustStockModalProps> = ({
           </div>
 
           <div className="p-6 space-y-4">
-            {/* 409 INSUFFICIENT_STOCK Error Banner in UI */}
             {insufficientStockError && (
               <div className="alert alert-error">
                 <span className="text-xl">⚠️</span>

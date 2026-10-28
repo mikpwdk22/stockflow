@@ -121,7 +121,6 @@ export const CreateOrderModal: React.FC<CreateOrderModalProps> = ({
     } catch (err) {
       if (err instanceof ApiError) {
         if (err.code === 'INSUFFICIENT_STOCK') {
-          // Highlight exact SKU that failed and available quantity
           setFailedSKU({
             sku: err.sku || 'Unknown',
             available: err.available ?? 0,
@@ -257,7 +256,6 @@ export const CreateOrderModal: React.FC<CreateOrderModalProps> = ({
           </div>
 
           <div className="p-6 space-y-4">
-            {/* 409 INSUFFICIENT_STOCK Banner with highlighted SKU */}
             {failedSKU && (
               <div className="alert alert-error">
                 <span className="text-2xl">⛔</span>
@@ -274,7 +272,6 @@ export const CreateOrderModal: React.FC<CreateOrderModalProps> = ({
               </div>
             )}
 
-            {/* Validation errors (400) */}
             {validationErrors.length > 0 && (
               <div className="alert alert-warning flex-col items-start gap-1">
                 <div className="font-bold text-amber-900 text-xs uppercase tracking-wider mb-1">

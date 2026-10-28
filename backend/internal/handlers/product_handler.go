@@ -175,7 +175,6 @@ func (h *ProductHandler) Delete(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 		if errors.Is(err, repository.ErrProductHasHistory) {
-			// As required by API contract: 409 {"error":{"code":"PRODUCT_HAS_HISTORY"}}
 			RespondError(w, http.StatusConflict, "PRODUCT_HAS_HISTORY", "Product has movement history and cannot be deleted")
 			return
 		}

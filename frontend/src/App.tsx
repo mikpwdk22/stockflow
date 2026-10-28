@@ -211,16 +211,15 @@ export function App() {
           </div>
         )}
 
-        {/* 1. Summary Cards */}
+        {/* Summary Cards */}
         <SummaryCards
           summary={summary}
           dailySales={dailySales}
           loading={loading && !summary}
         />
 
-        {/* 2. Search & Filter Bar */}
+        {/* Search & Filter Bar */}
         <div className="bg-white rounded-xl p-4 border border-slate-200 shadow-sm mb-6 flex flex-col sm:flex-row items-center justify-between gap-4">
-          {/* Debounced Search */}
           <div className="relative w-full sm:w-80">
             <span className="absolute left-3 top-2.5 text-slate-400 text-sm">
               🔍
@@ -242,7 +241,6 @@ export function App() {
             )}
           </div>
 
-          {/* Filter Tabs: All / Active / Inactive / Low stock (<= 10) */}
           <div className="flex items-center p-1 bg-slate-100 rounded-lg w-full sm:w-auto overflow-x-auto text-xs font-semibold">
             <button
               onClick={() => setStatusFilter('all')}
@@ -287,7 +285,7 @@ export function App() {
           </div>
         </div>
 
-        {/* 3. Products Table */}
+        {/* Products Table */}
         <ProductTable
           products={products}
           loading={loading}

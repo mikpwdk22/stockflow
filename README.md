@@ -291,14 +291,18 @@ curl -X GET "http://localhost:8080/api/reports/daily-sales?date=2026-10-28"
 ## ⏱️ Honest Hours Spent & Future Improvements
 
 ### Honest Hours Spent
-* **Database & Schema Modeling**: ~0.75 hours (constraints, foreign keys, realistic seed fixtures in IDR).
-* **Go Backend & Concurrency Safe Core**: ~2.5 hours (deterministic lock ordering, atomic checks, error envelopes, tests).
-* **Frontend React / TypeScript UI**: ~2.5 hours (strict types, centralized API client, cross-stack 409/400 handling, modals, and design).
-* **Integration, Testing & Dockerization**: ~1 hour (Docker Compose multi-stage build, Vitest unit test suite, documentation).
-* **Total Focused Effort**: ~6.75 hours.
+* **Database & Schema Modeling**: ~45-50 minutes (constraints, foreign keys, realistic seed fixtures in IDR).
+* **Go Backend & Concurrency Safe Core**: ~2 to 3.5- hours (deterministic lock ordering, atomic checks, error envelopes, tests).
+* **Frontend React / TypeScript UI**: ~1.5-2 hours (strict types, centralized API client, cross-stack 409/400 handling, modals, and design).
+* **Integration, Testing & Dockerization**: ~30 minutes (Docker Compose multi-stage build, Vitest unit test suite, documentation).
+* **Total Focused Effort**: ~5-6 hours.
 
 ### What I Would Improve Next
 1. **Database Read Replicas & CQRS**: For large-scale warehouses with high read traffic on product search, implement read-replicas for catalog browsing while keeping the primary write master dedicated to transactional row locks.
 2. **WebSocket / SSE Live Updates**: Broadcast inventory mutations via Server-Sent Events or WebSockets so multiple warehouse supervisors see stock levels change on screen in real-time without manual refresh.
 3. **Partial Order Fulfillment / Backorders**: Allow orders to mark items as partially fulfilled with automated backorder queues when restocked.
 4. **Export / CSV Reporting**: Implement downloadable CSV reports for monthly warehouse audits and tax reporting.
+
+### IMPORTANT
+
+I did this code quite fast because i had some help from my friend who is a senior software engineer to guide me through and help me if im stuck so i did it quite fast.

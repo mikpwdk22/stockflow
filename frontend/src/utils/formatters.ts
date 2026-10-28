@@ -1,5 +1,3 @@
-// Pure utility functions and formatters
-
 export function formatIDR(amount: number): string {
   if (isNaN(amount) || amount === null || amount === undefined) {
     return 'Rp 0'

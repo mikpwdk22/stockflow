@@ -31,7 +31,6 @@ func (h *OrderHandler) Create(w http.ResponseWriter, r *http.Request) {
 
 	order, _, err := h.repo.Create(r.Context(), req, idempotencyKey)
 	if err != nil {
-		// Insufficient stock -> 409 {"error":{"code":"INSUFFICIENT_STOCK","sku":"...","available":n}}
 		var insufficientErr *repository.InsufficientStockError
 		if errors.As(err, &insufficientErr) {
 			RespondErrorWithStock(
@@ -45,7 +44,6 @@ func (h *OrderHandler) Create(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		// Validation errors -> 400
 		if errors.Is(err, repository.ErrEmptyCustomer) ||
 			errors.Is(err, repository.ErrEmptyItems) ||
 			errors.Is(err, repository.ErrInvalidQty) ||

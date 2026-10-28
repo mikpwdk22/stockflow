@@ -1,5 +1,3 @@
-// Shared API types in one module - Strict TypeScript, no 'any' on domain data
-
 export interface Product {
   id: number
   sku: string

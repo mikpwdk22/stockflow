@@ -15,7 +15,6 @@ export const SummaryCards: React.FC<SummaryCardsProps> = ({
 }) => {
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 mb-6">
-      {/* 1. Total Products */}
       <div className="bg-white rounded-xl p-5 border border-slate-200 shadow-sm transition-all hover:shadow-md">
         <div className="flex items-center justify-between text-slate-500 mb-2">
           <span className="text-xs font-semibold uppercase tracking-wider">Total Products</span>
@@ -31,7 +30,7 @@ export const SummaryCards: React.FC<SummaryCardsProps> = ({
         <div className="text-xs text-slate-400 mt-1">Catalog items count</div>
       </div>
 
-      {/* 2. Active Products */}
+      {/* Active Products */}
       <div className="bg-white rounded-xl p-5 border border-slate-200 shadow-sm transition-all hover:shadow-md">
         <div className="flex items-center justify-between text-slate-500 mb-2">
           <span className="text-xs font-semibold uppercase tracking-wider">Active Items</span>
@@ -47,7 +46,7 @@ export const SummaryCards: React.FC<SummaryCardsProps> = ({
         <div className="text-xs text-slate-400 mt-1">Ready for sale</div>
       </div>
 
-      {/* 3. Total Stock Value */}
+      {/* Stock Valuation */}
       <div className="bg-white rounded-xl p-5 border border-slate-200 shadow-sm transition-all hover:shadow-md">
         <div className="flex items-center justify-between text-slate-500 mb-2">
           <span className="text-xs font-semibold uppercase tracking-wider">Stock Valuation</span>
@@ -63,7 +62,7 @@ export const SummaryCards: React.FC<SummaryCardsProps> = ({
         <div className="text-xs text-slate-400 mt-1">Total inventory worth</div>
       </div>
 
-      {/* 4. Low Stock Alert */}
+      {/* Low Stock */}
       <div className="bg-white rounded-xl p-5 border border-slate-200 shadow-sm transition-all hover:shadow-md">
         <div className="flex items-center justify-between text-slate-500 mb-2">
           <span className="text-xs font-semibold uppercase tracking-wider">Low Stock (&le; 10)</span>
@@ -79,7 +78,7 @@ export const SummaryCards: React.FC<SummaryCardsProps> = ({
         <div className="text-xs text-amber-700 mt-1">Requires reordering</div>
       </div>
 
-      {/* 5. Bonus: Today's Sales */}
+      {/* Today Sales */}
       <div className="bg-white rounded-xl p-5 border border-slate-200 shadow-sm transition-all hover:shadow-md">
         <div className="flex items-center justify-between text-slate-500 mb-2">
           <span className="text-xs font-semibold uppercase tracking-wider">Today's Sales</span>

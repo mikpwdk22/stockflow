@@ -53,7 +53,6 @@ func (h *StockHandler) AdjustStock(w http.ResponseWriter, r *http.Request) {
 		}
 		var insufficientErr *repository.InsufficientStockError
 		if errors.As(err, &insufficientErr) {
-			// Contract specifies: 409 {"error":{"code":"INSUFFICIENT_STOCK","available":n}}
 			RespondErrorWithStock(w, http.StatusConflict, "INSUFFICIENT_STOCK", "Insufficient stock available", "", &insufficientErr.Available)
 			return
 		}

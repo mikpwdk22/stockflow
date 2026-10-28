@@ -23,7 +23,6 @@ export const ProductTable: React.FC<ProductTableProps> = ({
   onEdit,
   onDelete,
 }) => {
-  // 1. Error state with retry (Requirement: reachable)
   if (error) {
     return (
       <div className="bg-white rounded-xl border border-red-200 p-8 text-center my-6 shadow-sm">
@@ -40,7 +39,6 @@ export const ProductTable: React.FC<ProductTableProps> = ({
     )
   }
 
-  // 2. Loading state with skeleton rows (Requirement: reachable)
   if (loading && products.length === 0) {
     return (
       <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
@@ -74,7 +72,6 @@ export const ProductTable: React.FC<ProductTableProps> = ({
     )
   }
 
-  // 3. Empty state (Requirement: reachable)
   if (!loading && products.length === 0) {
     return (
       <div className="bg-white rounded-xl border border-slate-200 p-12 text-center my-6 shadow-sm">
@@ -87,7 +84,6 @@ export const ProductTable: React.FC<ProductTableProps> = ({
     )
   }
 
-  // 4. Products table
   return (
     <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
       <div className="overflow-x-auto">

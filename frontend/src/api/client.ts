@@ -1,6 +1,3 @@
-// Centralized API client module - owns all fetch calls and error envelope parsing.
-// Components never build URLs ad hoc.
-
 import type {
   AdjustStockPayload,
   AdjustStockResult,
